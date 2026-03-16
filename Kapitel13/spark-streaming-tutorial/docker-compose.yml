@@ -1,0 +1,12 @@
+services:
+  spark-job:
+    build: ./spark
+    volumes:
+      - ./spark:/app
+      - ./data:/data
+      - ./chk:/chk
+    working_dir: /app
+    command: 
+      - /bin/bash
+      - -lc
+      - /opt/bitnami/spark/bin/spark-submit --master local[*] /app/stream_orders.py

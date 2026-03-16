@@ -1,0 +1,48 @@
+# ------------------------------------------------------------
+# Docker Compose Configuration for a single-node Apache Kafka
+# Setup using the Bitnami Kafka image and KRaft mode.
+#
+# This configuration is intended for development and testing.
+# It runs Kafka without Zookeeper using the built-in KRaft mode.
+# ----
+
+services:
+  kafka:
+    # Bitnami Kafka Image
+    image: bitnami/kafka:3.7
+    # Name of the running container
+    container_name: kafka
+    # Expose Kafka on port 9092
+    ports:
+      - "9092:9092"
+    environment:
+      # Enable KRaft mode (Kafka without Zookeeper)    
+      - KAFKA_ENABLE_KRAFT=yes
+      # Unique ID of this Kafka node (required in KRaft mode)
+      - KAFKA_CFG_NODE_ID=1
+      # Define the roles for this node (both broker and controller)
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      # Listener name used for controller communication
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      # Configure listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      # Address that clients will use to connect to Kafka (advertised listeners)
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      # Map listener names to security protocols
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      # Define the controller quorum voters (only one node in this setup)
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+
+      # Development-friendly defaults for single-node setup
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=1
+      # Automatically create topics if they do not exist (useful for development)
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+    volumes:
+      # Persist Kafka data to a named volume for durability across container restarts
+      - kafka_data:/bitnami/kafka
+
+# Used to persist Kafka data across container restarts. This volume will store all Kafka logs and data.
+volumes:
+  kafka_data:

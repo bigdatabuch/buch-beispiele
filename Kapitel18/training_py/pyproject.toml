@@ -1,0 +1,12 @@
+[project]
+name = "bdb-ki"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate>=1.10.0",
+    "datasets==3.6.0",
+    "numpy>=2.3.2",
+    "torch>=2.8.0",
+    "transformers>=4.55.4",
+]

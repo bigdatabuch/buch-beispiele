@@ -1,0 +1,58 @@
+// User-Dokument laden und Präferenzen als Variablen bereitstellen
+LET u        = DOCUMENT("users/bob")
+LET here     = u.prefs.location
+LET cuisines = u.prefs.cuisine
+LET vegan    = u.prefs.vegan_only
+LET maxKm    = u.prefs.max_distance_km
+
+// Restaurants, die Bob bereits geliked hat (OUTBOUND-Kanten von Bob)
+LET userLikes = (
+  FOR v IN 1..1 OUTBOUND u._id GRAPH "social"
+    FILTER IS_SAME_COLLECTION("restaurants", v)
+    RETURN v._id
+)
+
+// Ähnliche Nutzer finden (teilen mind. ein Like mit Bob)
+LET similarUsers = UNIQUE(
+  FOR rId IN userLikes
+    FOR u2 IN 1..1 INBOUND rId GRAPH "social"
+      FILTER IS_SAME_COLLECTION("users", u2) AND u2._id != u._id
+      RETURN u2._id
+)
+
+// Kandidatenrestaurants der ähnlichen Nutzer
+//  - nicht von Bob geliked
+//  - nach Bobs Präferenzen (Küche, vegan) und Entfernung filtern
+FOR uId IN similarUsers
+  LET voter = DOCUMENT(uId)
+  FOR r IN 1..1 OUTBOUND uId GRAPH "social"
+    FILTER IS_SAME_COLLECTION("restaurants", r)
+      AND r._id NOT IN userLikes
+      AND (cuisines == null OR r.cuisine IN cuisines)
+      AND (vegan == null OR vegan == false OR "vegan" IN r.tags)
+  LET dist = GEO_DISTANCE(here, r.location)
+  FILTER maxKm == null OR dist <= maxKm * 1000
+
+  // Aggregation
+  //  - Votes je Restaurant zählen
+  //  - Namen der Voter einsammeln
+  //  - Distanz und einfacher Score berechnen
+  COLLECT rest = r INTO grp = { voterName: voter.name }
+  LET votes       = LENGTH(grp)
+  LET voterNames  = UNIQUE(grp[*].voterName)
+  LET distM       = GEO_DISTANCE(here, rest.location)
+  LET score       = votes * 2 + rest.rating - (distM / 1000) * 0.2
+
+  // Sortieren und Top-N zurückgeben
+  SORT score DESC, rest.rating DESC
+  LIMIT 10
+  RETURN {
+    name:    rest.name,
+    cuisine: rest.cuisine,
+    rating:  rest.rating,
+    tags:    rest.tags,
+    meters:  ROUND(distM),
+    votes,
+    likedBy: voterNames,
+    score
+  }

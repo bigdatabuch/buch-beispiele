@@ -1,0 +1,11 @@
+[project]
+name = "bdb-formate"
+version = "0.1.0"
+description = "Beispiele für Datenformate"
+requires-python = ">=3.12"
+dependencies = [
+    "avro>=1.12.0",
+    "pandas>=2.3.2",
+    "pyarrow>=21.0.0",
+    "pyspark>=4.0.1",
+]

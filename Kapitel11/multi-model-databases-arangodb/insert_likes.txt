@@ -1,0 +1,24 @@
+FOR e IN [
+  { _key: "alice__katz-orange",   _from: "users/alice", _to: "restaurants/katz-orange" },
+  { _key: "alice__mustafa",       _from: "users/alice", _to: "restaurants/mustafa" },
+
+  { _key: "bob__mustafa",         _from: "users/bob",   _to: "restaurants/mustafa" },
+  { _key: "bob__curry36",         _from: "users/bob",   _to: "restaurants/curry36" },
+  { _key: "bob__burgermeister",   _from: "users/bob",   _to: "restaurants/burgermeister" },
+
+  { _key: "carol__katz-orange",   _from: "users/carol", _to: "restaurants/katz-orange" },
+  { _key: "carol__markthalle-neun", _from: "users/carol", _to: "restaurants/markthalle-neun" },
+  { _key: "carol__zeit-fuer-brot",  _from: "users/carol", _to: "restaurants/zeit-fuer-brot" },
+
+  { _key: "dave__katz-orange",    _from: "users/dave",  _to: "restaurants/katz-orange" },
+  { _key: "dave__brlo",           _from: "users/dave",  _to: "restaurants/brlo" },
+  { _key: "dave__burgermeister",           _from: "users/dave",  _to: "restaurants/burgermeister" },
+
+  { _key: "eva__mustafa",         _from: "users/eva",   _to: "restaurants/mustafa" },
+  { _key: "eva__neni-berlin",     _from: "users/eva",   _to: "restaurants/neni-berlin" },
+
+  { _key: "frank__cafe-anna",     _from: "users/frank", _to: "restaurants/cafe-anna" }
+]
+INSERT e INTO likes
+OPTIONS { overwriteMode: "ignore" }
+RETURN NEW

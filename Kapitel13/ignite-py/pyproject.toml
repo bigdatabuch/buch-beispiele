@@ -1,0 +1,8 @@
+[project]
+name = "bdb-ignite-py"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "pyignite>=0.6.1",
+]

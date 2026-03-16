@@ -1,0 +1,8 @@
+[project]
+name = "bdb-visu"
+version = "0.1.0"
+description = "Visualisierungsbeispiele"
+requires-python = ">=3.12"
+dependencies = [
+    "opensearch-py>=3.0.0",
+]

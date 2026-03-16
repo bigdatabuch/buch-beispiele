@@ -1,0 +1,41 @@
+FOR u IN [
+  { _key: "alice", name: "Alice", prefs: {
+      vegan_only: true,
+      cuisine: ["Vietnamese","Israeli"],
+      max_distance_km: 2,
+      location: GEO_POINT(13.4050, 52.5200)
+  }},
+  { _key: "bob", name: "Bob", prefs: {
+      vegan_only: false,
+      cuisine: ["German","Brewery","Fast Food"],
+      max_distance_km: 3,
+      location: GEO_POINT(13.3884, 52.4934)
+  }},
+  { _key: "carol", name: "Carol", prefs: {
+      vegan_only: true,
+      cuisine: ["Bakery","Market"],
+      max_distance_km: 2.5,
+      location: GEO_POINT(13.4306, 52.4997)
+  }},
+  { _key: "dave", name: "Dave", prefs: {
+      vegan_only: false,
+      cuisine: ["Brewery","Fast Food"],
+      max_distance_km: 4,
+      location: GEO_POINT(13.3673, 52.5048)
+  }},
+  { _key: "eva", name: "Eva", prefs: {
+      vegan_only: true,
+      cuisine: ["Israeli","Market"],
+      max_distance_km: 3,
+      location: GEO_POINT(13.3429, 52.5056)
+  }},
+  { _key: "frank", name: "Frank", prefs: {
+      vegan_only: false,
+      cuisine: ["Cafe","Bakery"],
+      max_distance_km: 1.5,
+      location: GEO_POINT(13.4245, 52.5380)
+  }}
+]
+INSERT u INTO users
+OPTIONS { overwriteMode: "update", keepNull: false }
+RETURN NEW

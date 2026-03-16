@@ -1,0 +1,14 @@
+[project]
+name = "bdb-ki-langchain"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.27",
+    "langchain-experimental>=0.3.4",
+    "langchain-ollama>=0.3.7",
+    "langchain-openai>=0.3.31",
+    "pandas>=2.3.2",
+    "wikipedia>=1.4.0",
+]
